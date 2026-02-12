@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reaction Tester</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+    #box{
+        height: 200px;
+        width: 200px;
+        background-color: aqua;
+        /* CHANGE 1: Use 'absolute' for reliable document-relative positioning */
+        position: absolute; 
+    }
+    </style>
+</head>
+<body>
+    <h1>Reaction Tester</h1>
+    <p>Click on the Boxes as soon as you can</p>
+    <div id="box"></div>
+    <p>Your Reaction Time: <span id="timeTaken"></span></p> <script>
+        var start = new Date().getTime();
+        var timeDisplay = document.getElementById("timeTaken");
+
+        function getRandomcolor(){
+            var letters='0123456789ABCDEF';
+            var color ='#';
+            for(var i=0;i< 6;i++){
+                color +=letters[Math.floor(Math.random()*16)];
+            }
+            return color;
+        }
+
+        function move(){  
+            var left;
+            var topValue; // Renamed to avoid confusion with the scope 'top'
+            var wh;
+
+            // FIX 1: Assign a random value to 'topValue'
+            left = Math.random() * 800; // Increased range for better spread
+            topValue = Math.random() * 400; // Assign the value here
+            
+            wh = ((Math.random()*200) + 50); // Smaller, more reasonable size range (50px to 250px)
+            
+            // FIX 2: Set the top position
+            document.getElementById("box").style.left = left + "px"; 
+            document.getElementById("box").style.top = topValue + "px";
+            
+            // FIX 3: Add "px" unit for size
+            document.getElementById("box").style.width = wh + "px";
+            document.getElementById("box").style.height = wh + "px";
+
+            // Apply style and reset timer
+            document.getElementById("box").style.borderRadius = (Math.random() > 0.5 ? "50%" : "0"); // Bonus: Make it a circle sometimes!
+            document.getElementById("box").style.display = "block";
+            document.getElementById("box").style.backgroundColor = getRandomcolor();
+            
+            start = new Date().getTime();
+        }
+
+        function boxClicked() {
+            document.getElementById("box").style.display="none";
+            var end = new Date().getTime();
+            var timeTakes = (end - start)/1000;
+            
+            // Replaced alert() with in-page text update for better user experience
+            timeDisplay.innerHTML = timeTakes + " seconds!";
+            
+            setTimeout(move, (Math.random() * 2000) + 500); // Wait 0.5 to 2.5 seconds before showing next box
+        }
+
+        // Initial setup
+        move(); 
+
+        document.getElementById("box").onclick = boxClicked;
+    </script>
+</body>
+</html>
